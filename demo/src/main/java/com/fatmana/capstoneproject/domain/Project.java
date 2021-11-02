@@ -2,7 +2,11 @@ package com.fatmana.capstoneproject.domain;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import java.util.Date;
 //projeyi herseferinde capstoneprojectapplicstion.java dan run edip spring i calistir.
@@ -21,19 +25,24 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank(message = "Project name is required")  //bu annotation i h2 yada postmanda null blank gormemek icin kullaniyoruz.
     private String projectName;
 
+    @NotBlank(message = "Project identifier is required")
+    @Size(min=4,max=5,message = "Please use 4 to 5 characters")
+    @Column(updatable = false,unique = true) //column allows you to set off some parameters for the column itself
     private String projectIdentifier;
 
+    @NotBlank(message = "project description is required")
     private String description;
 
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date start_date;
-
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date end_date;
-
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date created_At;
-
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
     public Long getId() {
