@@ -8,6 +8,11 @@ import org.springframework.stereotype.Repository;
 @Repository  //bu annotationdan sonra otomatik import eklenmeli
 public interface ProjectRepository extends CrudRepository<Project, Long> {
     //sagclick override iterable asagisi otomatik geliyor
+   Project findByProjectIdentifier(String projectId);
+
+
     @Override
-    Iterable<Project> findAllById(Iterable<Long> longs);
+    Iterable<Project> findAll();
+
+
 }
