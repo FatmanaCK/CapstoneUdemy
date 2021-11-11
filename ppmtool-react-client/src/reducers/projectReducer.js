@@ -1,4 +1,4 @@
-import { GET_PROJECTS } from "../actions/types";
+import { GET_PROJECTS ,GET_PROJECTS} from "../actions/types";
 
 const initialState = {
   projects: [],
