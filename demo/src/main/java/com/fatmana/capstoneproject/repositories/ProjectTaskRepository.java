@@ -1,4 +1,8 @@
 package com.fatmana.capstoneproject.repositories;
+import com.fatmana.capstoneproject.domain.ProjectTask;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ProjectTaskRepository {
+@Repository
+public interface ProjectTaskRepository extends CrudRepository<ProjectTask, Long> {
 }
