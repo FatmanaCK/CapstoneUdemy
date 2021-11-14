@@ -1,5 +1,6 @@
 package com.fatmana.capstoneproject.web;
 
+
 import com.fatmana.capstoneproject.domain.Project;
 import com.fatmana.capstoneproject.services.MapValidationErrorService;
 import com.fatmana.capstoneproject.services.ProjectService;
@@ -7,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 @RestController
 @RequestMapping("/api/project")
 @CrossOrigin        //bunu 32.videoda vscode error verince ekledik
@@ -52,28 +56,28 @@ public class ProjectController {
         if(errorMap !=null)return errorMap;
 
 
-        Project project1=projectService.saveorUpdateProject(project); //eger burayi yazmazsak h2console ve postman run etmiyor
+        Project project1=projectService.saveOrUpdateProject(project); //eger burayi yazmazsak h2console ve postman run etmiyor
         return new ResponseEntity<Project>(project, HttpStatus.CREATED); //we should be enabled to start actually using our API and creating object
 
     }
 
-    @GetMapping("/{projectId}") //parantez icine we need to pass a path variable double quote,icindeki asagidaki path variable ile match olmali
-    public ResponseEntity<?> getProjectId(@PathVariable String projectId ){
-                                    //paranteze path annnaotation and path variable
+    @GetMapping("/{projectId}")
+    public ResponseEntity<?> getProjectById(@PathVariable String projectId){
 
-        Project project =projectService.findProjectByIdentifier(projectId);
+        Project project = projectService.findProjectByIdentifier(projectId);
+
         return new ResponseEntity<Project>(project, HttpStatus.OK);
     }
 
-    @GetMapping ("/all") //video17
+
+    @GetMapping("/all")
     public Iterable<Project> getAllProjects(){return projectService.findAllProjects();}
-    //we don't need any exception now
 
 
     @DeleteMapping("/{projectId}")
     public ResponseEntity<?> deleteProject(@PathVariable String projectId){
         projectService.deleteProjectByIdentifier(projectId);
 
-        return new ResponseEntity<String >("Project with ID: '" +projectId+ "'was deleted",HttpStatus.OK);
+        return new ResponseEntity<String>("Project with ID: '"+projectId+"' was deleted", HttpStatus.OK);
     }
 }
