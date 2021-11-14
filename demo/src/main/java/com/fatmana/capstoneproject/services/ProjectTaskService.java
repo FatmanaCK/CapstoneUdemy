@@ -19,7 +19,7 @@ public class ProjectTaskService {
     private ProjectTaskRepository projectTaskRepository;
 
 
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask){
 
         //Exceptions: Project not found
 
@@ -28,22 +28,25 @@ public class ProjectTaskService {
         //set the bl to pt
         projectTask.setBacklog(backlog);
         //we want our project sequence to be like this: IDPRO-1  IDPRO-2  ...100 101
-        //instructor explain video49
         Integer BacklogSequence = backlog.getPTSequence();
         // Update the BL SEQUENCE
         BacklogSequence++;
 
-        //Add Sequence to ProjectTask.
-        projectTask.setProjectSequence(projectIdentifier + "-" + BacklogSequence);
-        projectTask.setProjectIdentifer(projectIdentifier);
+        backlog.setPTSequence(BacklogSequence);
 
-        //INITIAL priority when priority null...
-//        if(projectTask.getPriority()==0||projectTask.getPriority()==null){
-//            projectTask.setPriority(3);
-//        }
+        //Add Sequence to Project Task
+        projectTask.setProjectSequence(backlog.getProjectIdentifier()+"-"+BacklogSequence);
+        projectTask.setProjectIdentifier(projectIdentifier);
+
+        //INITIAL priority when priority null
+
         //INITIAL status when status is null
-        if (projectTask.getStatus() == "" || projectTask.getStatus() == null) {
+        if(projectTask.getStatus()==""|| projectTask.getStatus()==null){
             projectTask.setStatus("TO_DO");
+        }
+
+        if(projectTask.getPriority()==null){ //In the future we need projectTask.getPriority()== 0 to handle the form
+            projectTask.setPriority(3);
         }
 
         return projectTaskRepository.save(projectTask);
