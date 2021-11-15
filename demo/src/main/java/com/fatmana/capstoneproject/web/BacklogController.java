@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+
 @RestController
 @RequestMapping("/api/backlog")
 @CrossOrigin
@@ -29,8 +30,8 @@ public class BacklogController {
         //show delete
         //custom exception
 
-        ResponseEntity<?> erroMap = mapValidationErrorService.MapValidationService(result);
-        if (erroMap != null) return erroMap;
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
 
         ProjectTask projectTask1 = projectTaskService.addProjectTask(backlog_id, projectTask);
 
