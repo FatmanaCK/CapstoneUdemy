@@ -17,8 +17,7 @@ import java.util.Map;
 @Service
 public class MapValidationErrorService {
 
-    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result){
-        //@Valid annotation i sonradan ekledik,we're passing a valid request,body of type of project
+    public ResponseEntity<?> MapValidationService(BindingResult result){        //@Valid annotation i sonradan ekledik,we're passing a valid request,body of type of project
         /*for me...
         The @Valid annotation ensures the validation of the whole object.
         Importantly, it performs the validation of the whole object graphs.
@@ -29,20 +28,18 @@ public class MapValidationErrorService {
          should store and retrieve the result of the validation.The BindingResult must come right after the model object that is
          validated or else Spring will fail to validate the object and throw an exception.
          */
-        if (result.hasErrors()){
-            Map<String,String> errorMAp = new HashMap<>();
-            for (FieldError error:result.getFieldErrors()){
-                errorMAp.put(error.getField(),error.getDefaultMessage());
+        if(result.hasErrors()){
+            Map<String, String> errorMap = new HashMap<>();
+
+            for(FieldError error: result.getFieldErrors()){
+                errorMap.put(error.getField(), error.getDefaultMessage());
             }
-            //  return new ResponseEntity<String>("Invalid Project Object",HttpStatus.BAD_REQUEST);// bunu video12deyapti
-            //yukaridaki line ile calsitirinca postman error vermiyor.
-            return new ResponseEntity<List<FieldError>>(result.getFieldErrors(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
         }
-        return  null;
-}
 
+        return null;
 
-    public ResponseEntity<?> MapValidationService(BindingResult result) {
-        return null; //burayi controller classta erro verdigi icin ekledim.
     }
 }
+            //  return new ResponseEntity<String>("Invalid Project Object",HttpStatus.BAD_REQUEST);// bunu video12deyapti
+            //yukaridaki line ile calsitirinca postman error vermiyor.

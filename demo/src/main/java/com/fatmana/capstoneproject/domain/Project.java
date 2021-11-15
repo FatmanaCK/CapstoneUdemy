@@ -3,6 +3,7 @@ package com.fatmana.capstoneproject.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -22,28 +23,34 @@ public class Project {
  application.properties da  url i degistirmelisin eger sayfa acilmiyorsa
 
  */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Project name is required")  //bu annotation i h2 yada postmanda null blank gormemek icin kullaniyoruz.
+    @NotBlank(message = "Project name is required")
     private String projectName;
-
-    @NotBlank(message = "Project identifier is required")
-    @Size(min=4,max=5,message = "Please use 4 to 5 characters")
-    @Column(updatable = false,unique = true) //column allows you to set off some parameters for the column itself
+    @NotBlank(message ="Project Identifier is required")
+    @Size(min=4, max=5, message = "Please use 4 to 5 characters")
+    @Column(updatable = false, unique = true)
     private String projectIdentifier;
-
-    @NotBlank(message = "project description is required")
+    @NotBlank(message = "Project description is required")
     private String description;
-
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date start_date;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date end_date;
     @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(updatable = false)
     private Date created_At;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    @JsonIgnore
+    private Backlog backlog;
+
+    public Project() {
+    }
 
     public Long getId() {
         return id;
@@ -85,12 +92,12 @@ public class Project {
         this.start_date = start_date;
     }
 
-    public Date getUpdated_At() {
-        return updated_At;
+    public Date getEnd_date() {
+        return end_date;
     }
 
-    public void setUpdated_At(Date updated_At) {
-        this.updated_At = updated_At;
+    public void setEnd_date(Date end_date) {
+        this.end_date = end_date;
     }
 
     public Date getCreated_At() {
@@ -101,29 +108,30 @@ public class Project {
         this.created_At = created_At;
     }
 
-    public Date getEnd_date() {
-        return end_date;
+    public Date getUpdated_At() {
+        return updated_At;
     }
 
-    public void setEnd_date(Date end_date) {
-        this.end_date = end_date;
+    public void setUpdated_At(Date updated_At) {
+        this.updated_At = updated_At;
     }
 
-    public Project (){
+    public Backlog getBacklog() {
+        return backlog;
+    }
 
-}
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
+    }
 
-   @PrePersist // configure a callback for pre-persist (pre-insert) events of the entity.
+    @PrePersist
     protected void onCreate(){
-       this.created_At=new Date();
+        this.created_At = new Date();
+    }
 
-   }
-
-   @PreUpdate
+    @PreUpdate
     protected void onUpdate(){
-       this.updated_At=new Date();
-
-   }
-
+        this.updated_At = new Date();
+    }
 
 }

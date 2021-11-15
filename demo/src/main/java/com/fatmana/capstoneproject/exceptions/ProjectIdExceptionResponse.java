@@ -1,13 +1,12 @@
 package com.fatmana.capstoneproject.exceptions;
 
-public class ProjectIdExceptionsResponse {
+public class ProjectIdExceptionResponse {
+
     private String projectIdentifier;
 
-
-
-    public ProjectIdExceptionsResponse(String projectIdentifier){
-         this.projectIdentifier=projectIdentifier;
-     }
+    public ProjectIdExceptionResponse(String projectIdentifier) {
+        this.projectIdentifier = projectIdentifier;
+    }
 
     public String getProjectIdentifier() {
         return projectIdentifier;
@@ -17,3 +16,5 @@ public class ProjectIdExceptionsResponse {
         this.projectIdentifier = projectIdentifier;
     }
 }
+
+
