@@ -26,6 +26,8 @@ public class BacklogController {
     @PostMapping("/{backlog_id}")
     public ResponseEntity<?> addPTtoBacklog(@Valid @RequestBody ProjectTask projectTask,
                                             BindingResult result, @PathVariable String backlog_id){
+        //show delete
+        //custom exception
 
         ResponseEntity<?> erroMap = mapValidationErrorService.MapValidationService(result);
         if (erroMap != null) return erroMap;
@@ -35,6 +37,14 @@ public class BacklogController {
         return new ResponseEntity<ProjectTask>(projectTask1, HttpStatus.CREATED);
 
     }
+
+    @GetMapping("/{backlog_id}")
+    public Iterable<ProjectTask> getProjectBacklog(@PathVariable String backlog_id){
+
+        return projectTaskService.findBacklogById(backlog_id);
+
+    }
+
 
 
 }
