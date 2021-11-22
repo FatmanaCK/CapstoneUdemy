@@ -1,14 +1,11 @@
 package com.fatmana.capstoneproject.domain;
 
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
 import java.util.Date;
 //projeyi herseferinde capstoneprojectapplicstion.java dan run edip spring i calistir.
 //proje sag click maven >>update project
@@ -46,8 +43,7 @@ public class Project {
     private Date updated_At;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
-    @JsonIgnore
-    private Backlog backlog;
+    public Backlog backlog;
 
     public Project() {
     }

@@ -9,7 +9,7 @@ target/
 .classpath
 .factorypath
 .project
-.settings
+../ppmtool-react-client/.settings
 .springBeans
 .sts4-cache
 
