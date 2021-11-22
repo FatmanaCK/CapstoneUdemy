@@ -16,5 +16,3 @@ public class ProjectIdExceptionResponse {
         this.projectIdentifier = projectIdentifier;
     }
 }
-
-
