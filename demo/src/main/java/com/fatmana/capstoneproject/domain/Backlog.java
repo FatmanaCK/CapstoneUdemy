@@ -69,4 +69,6 @@ public class Backlog {
     public void setProjectTasks(List<ProjectTask> projectTasks) {
         this.projectTasks = projectTasks;
     }
+
+
 }
