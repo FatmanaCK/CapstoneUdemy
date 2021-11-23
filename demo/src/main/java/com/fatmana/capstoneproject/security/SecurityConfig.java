@@ -12,9 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
-
         jsr250Enabled = true,
-
         prePostEnabled = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -43,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js"
                 ).permitAll()
+                .antMatchers("/api/users/**").permitAll()
                 .anyRequest().authenticated();
     }
 }
