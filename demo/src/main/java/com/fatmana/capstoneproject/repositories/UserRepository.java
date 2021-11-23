@@ -1,7 +1,7 @@
 package com.fatmana.capstoneproject.repositories;
 
 
-import org.apache.catalina.User;
+import com.fatmana.capstoneproject.domain.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

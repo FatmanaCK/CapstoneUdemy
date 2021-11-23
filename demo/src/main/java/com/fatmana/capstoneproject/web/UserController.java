@@ -1,8 +1,8 @@
 package com.fatmana.capstoneproject.web;
 
+import com.fatmana.capstoneproject.domain.User;
 import com.fatmana.capstoneproject.services.MapValidationErrorService;
 import com.fatmana.capstoneproject.services.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
