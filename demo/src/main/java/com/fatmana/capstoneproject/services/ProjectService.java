@@ -3,9 +3,12 @@ package com.fatmana.capstoneproject.services;
 
 import com.fatmana.capstoneproject.domain.Backlog;
 import com.fatmana.capstoneproject.domain.Project;
+import com.fatmana.capstoneproject.domain.User;
 import com.fatmana.capstoneproject.exceptions.ProjectIdException;
+import com.fatmana.capstoneproject.exceptions.ProjectNotFoundException;
 import com.fatmana.capstoneproject.repositories.BacklogRepository;
 import com.fatmana.capstoneproject.repositories.ProjectRepository;
+import com.fatmana.capstoneproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,57 +24,65 @@ public class ProjectService {
     @Autowired
     private BacklogRepository backlogRepository;
 
-    public Project saveOrUpdateProject(Project project) {
-        try {
+    @Autowired
+    private UserRepository userRepository;
+
+    public Project saveOrUpdateProject(Project project, String username){
+        try{
+            User user = userRepository.findByUsername(username);
+            project.setUser(user);
+            project.setProjectLeader(user.getUsername());
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 
-            if (project.getId() == null) {
+            if(project.getId()==null){
                 Backlog backlog = new Backlog();
                 project.setBacklog(backlog);
                 backlog.setProject(project);
                 backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
             }
 
-             if(project.getId()!=null){
-               project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
-              }
+            if(project.getId()!=null){
+                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+            }
 
             return projectRepository.save(project);
 
-        } catch (Exception e) {
-            throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase() + "' already exists");
+        }catch (Exception e){
+            throw new ProjectIdException("Project ID '"+project.getProjectIdentifier().toUpperCase()+"' already exists");
         }
 
     }
 
-    public Project findProjectByIdentifier(String projectId) {
-        //return projectRepository.findByProjectIdentifier(projectId);videoda 8.dk da alttakiyle degistirp devam ettik
+
+    public Project findProjectByIdentifier(String projectId, String username){
 
         //Only want to return the project if the user looking for it is the owner
 
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
-        if (project == null) {
-            throw new ProjectIdException("Project ID '" + projectId + "' does not exist");
+        if(project == null){
+            throw new ProjectIdException("Project ID '"+projectId+"' does not exist");
 
         }
+
+        if(!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException("Project not found in your account");
+        }
+
+
+
         return project;
     }
 
-    public Iterable<Project> findAllProjects() {
-        return projectRepository.findAll();
-    }
-
-    public void deleteProjectByIdentifier(String projectid) {
-        Project project = projectRepository.findByProjectIdentifier(projectid);
-
-        if (project == null) {
-            throw new ProjectIdException("Cannot Project with ID '" + projectid + " '. This project does not exist");
-        }
-        projectRepository.delete(project);
+    public Iterable<Project> findAllProjects(String username){
+        return projectRepository.findAllByProjectLeader(username);
     }
 
 
+    public void deleteProjectByIdentifier(String projectid, String username){
 
+
+        projectRepository.delete(findProjectByIdentifier(projectid, username));
+    }
 
 }
