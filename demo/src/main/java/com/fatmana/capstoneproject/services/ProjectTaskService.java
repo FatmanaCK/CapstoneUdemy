@@ -2,7 +2,6 @@ package com.fatmana.capstoneproject.services;
 
 
 import com.fatmana.capstoneproject.domain.Backlog;
-import com.fatmana.capstoneproject.domain.Project;
 import com.fatmana.capstoneproject.domain.ProjectTask;
 import com.fatmana.capstoneproject.exceptions.ProjectNotFoundException;
 import com.fatmana.capstoneproject.repositories.BacklogRepository;
@@ -24,52 +23,49 @@ public class ProjectTaskService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private ProjectService projectService;
 
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask){
 
-        try {
-            //PTs to be added to a specific project, project != null, BL exists
-            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
-            //set the bl to pt
-            System.out.println(backlog);
-            projectTask.setBacklog(backlog);
-            //we want our project sequence to be like this: IDPRO-1  IDPRO-2  ...100 101
-            Integer BacklogSequence = backlog.getPTSequence();
-            // Update the BL SEQUENCE
-            BacklogSequence++;
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask, String username){
 
-            backlog.setPTSequence(BacklogSequence);
 
-            //Add Sequence to Project Task
-            projectTask.setProjectSequence(backlog.getProjectIdentifier()+"-"+BacklogSequence);
-            projectTask.setProjectIdentifier(projectIdentifier);
+        //PTs to be added to a specific project, project != null, BL exists
+        Backlog backlog =  projectService.findProjectByIdentifier(projectIdentifier, username).getBacklog(); //backlogRepository.findByProjectIdentifier(projectIdentifier);
+        //set the bl to pt
+        System.out.println(backlog);
+        projectTask.setBacklog(backlog);
+        //we want our project sequence to be like this: IDPRO-1  IDPRO-2  ...100 101
+        Integer BacklogSequence = backlog.getPTSequence();
+        // Update the BL SEQUENCE
+        BacklogSequence++;
 
-            //INITIAL priority when priority null
+        backlog.setPTSequence(BacklogSequence);
 
-            //INITIAL status when status is null
-            if(projectTask.getStatus()==""|| projectTask.getStatus()==null){
-                projectTask.setStatus("TO_DO");
-            }
+        //Add Sequence to Project Task
+        projectTask.setProjectSequence(backlog.getProjectIdentifier()+"-"+BacklogSequence);
+        projectTask.setProjectIdentifier(projectIdentifier);
 
-            //Fix bug with priority in Spring Boot Server, needs to check null first
-            if(projectTask.getPriority()==0||projectTask.getPriority()==null){ //In the future we need projectTask.getPriority()== 0 to handle the form
-                projectTask.setPriority(3);
-            }
+        //INITIAL priority when priority null
 
-            return projectTaskRepository.save(projectTask);
-        }catch (Exception e){
-            throw new ProjectNotFoundException("Project not Found");
+        //INITIAL status when status is null
+        if(projectTask.getStatus()==""|| projectTask.getStatus()==null){
+            projectTask.setStatus("TO_DO");
         }
+
+        //Fix bug with priority in Spring Boot Server, needs to check null first
+        if(projectTask.getPriority()==null||projectTask.getPriority()==0){ //In the future we need projectTask.getPriority()== 0 to handle the form
+            projectTask.setPriority(3);
+        }
+
+        return projectTaskRepository.save(projectTask);
+
 
     }
 
-    public Iterable<ProjectTask>findBacklogById(String id){
+    public Iterable<ProjectTask>findBacklogById(String id, String username){
 
-        Project project = projectRepository.findByProjectIdentifier(id);
-
-        if(project==null){
-            throw new ProjectNotFoundException("Project with ID: '"+id+"' does not exist");
-        }
+        projectService.findProjectByIdentifier(id, username);
 
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
