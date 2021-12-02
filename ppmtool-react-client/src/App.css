@@ -1,31 +1,31 @@
 img {
-  width: 100%;
+  width: 130%;
 }
 
 .navbar {
-  background-color: #e3f2fd;
+  background-color: #df5721;
 }
 .fa.fa-edit {
-  color: #18a2b9;
+  color: #086ff7;
 }
 
 .list-group-item.delete:hover {
   cursor: -webkit-grab;
-  background-color: pink;
+  background-color: rgb(224, 36, 161);
 }
 
 .list-group-item.update:hover {
   cursor: -webkit-grab;
-  background-color: gainsboro;
+  background-color: rgb(62, 218, 153);
 }
 
 .list-group-item.board:hover {
   cursor: -webkit-grab;
-  background-color: gainsboro;
+  background-color: rgb(191, 224, 69);
 }
 
 .fa.fa-minus-circle {
-  color: red;
+  color: rgb(248, 11, 90);
 }
 
 .landing {
@@ -33,17 +33,17 @@ img {
   /* background: url("../img/showcase.jpg") no-repeat; */
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  height: 150vh;
   margin-top: -24px;
   margin-bottom: -50px;
 }
 
 .landing-inner {
-  padding-top: 80px;
+  padding-top: 100px;
 }
 
 .dark-overlay {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(19, 16, 16, 0.774);
   position: absolute;
   top: 0;
   left: 0;
@@ -61,5 +61,5 @@ img {
 }
 
 .form-control::placeholder {
-  color: #bbb !important;
+  color: rgb(11, 78, 2) !important;
 }

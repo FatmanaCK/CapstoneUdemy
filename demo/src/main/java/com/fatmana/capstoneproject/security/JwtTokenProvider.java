@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,8 +43,26 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public boolean validateToken(String token, HttpServletRequest httpServletRequest){
+        try {
+            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
+            return true;
+        }catch (SignatureException ex){
+            System.out.println("Invalid JWT Signature");
+        }catch (MalformedJwtException ex){
+            System.out.println("Invalid JWT token");
+        }catch (ExpiredJwtException ex){
+            System.out.println("Expired JWT token");
+            httpServletRequest.setAttribute("expired",ex.getMessage());
+        }catch (UnsupportedJwtException ex){
+            System.out.println("Unsupported JWT exception");
+        }catch (IllegalArgumentException ex){
+            System.out.println("Jwt claims string is empty");
+        }
+        return false;
+    }
     //Validate the token
-    public boolean validateToken(String token){
+   /* public boolean validateToken(String token){
         try{
             Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
             return true;
@@ -60,6 +79,7 @@ public class JwtTokenProvider {
         }
         return false;
     }
+    */
 
 
     //Get user Id from token
